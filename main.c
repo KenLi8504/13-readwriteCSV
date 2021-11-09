@@ -117,7 +117,7 @@ void add_data(){
   char tempboro[15];
   sscanf(input,"%d %s %d\n",&(new.year), tempboro, &(new.pop));
   strcpy(new.boro,tempboro);
-  int file = open("newnyc_pop.csv", O_WRONLY | O_APPEND);
+  int file = open("newnyc_pop.csv", O_WRONLY | O_APPEND,0644);
   if(file==-1){
       printf("Error!\n");
       return;
@@ -129,7 +129,27 @@ void add_data(){
   }
 }
 
+void update_data(){
+  read_data("newnyc_pop.csv");
 
+  printf("Which entry number would you like to update: ");
+  char input [50];
+  int index;
+  fgets(input,50,stdin);
+  sscanf(input,"%d\n",&index);
+
+  struct pop_entry new;
+  input [50];
+  printf("Enter the new year boro pop:");
+  fgets(input,50,stdin);
+  char tempboro[15];
+  sscanf(input,"%d %s %d\n",&(new.year), tempboro, &(new.pop));
+  strcpy(new.boro,tempboro);
+
+  int file = open("newnyc_pop.csv",O_WRONLY);
+  lseek(file, index * sizeof(struct pop_entry), SEEK_SET);
+  int newFile = write (file,&new,sizeof(struct pop_entry));
+}
 
 int main (int argc, char ** argv){
   if (argc > 2){
@@ -147,7 +167,7 @@ int main (int argc, char ** argv){
     }
 
     else if (!strcmp(function,"-read_data")){
-      read_data("./newnyc_pop.csv");
+      read_data("newnyc_pop.csv");
     }
 
     else if (!strcmp(function,"-add_data")){
@@ -155,7 +175,7 @@ int main (int argc, char ** argv){
     }
 
     else if (!strcmp(function,"-update_data")){
-      printf("-update_data\n");
+      update_data();
     }
 
     else{
