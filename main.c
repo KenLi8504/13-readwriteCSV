@@ -77,6 +77,7 @@ void read_csv(char *fileName){
         printf("Error!\n");
     }
   }
+  printf("Wrote %d bytes to nyc_pop.txt\n", size);
   printf("FINISHED READING CSV\n");
   }
 }
@@ -95,15 +96,40 @@ void read_data(char *fileName){
   struct pop_entry *entries = malloc(size);
   int err = read(goodFile, entries, size);
   if(err==-1){
-      printf("Error Detected!");
-      return;
-
+    printf("Error Detected!");
+    return;
   int totEntries = size / sizeof(struct pop_entry);
   for(int i=1;i<totEntries+1;i++){
-      printf("%d:\t year: %d\t boro: %s\t pop: %d\n", i, entries[i].year, entries[i].boro, entries[i].pop);
+    printf("%d:\t year: %d\t boro: %s\t pop: %d\n", i, entries[i].year, entries[i].boro, entries[i].pop);
   }
   free(entries);
 }
+printf("DONE\n");
+}
+
+void add_data(){
+  printf("-add_data\n");
+  struct pop_entry new;
+
+  char input [50];
+  printf("Enter year boro pop:");
+  fgets(input,50,stdin);
+  char tempboro[15];
+  sscanf(input,"%d %s %d\n",&(new.year), tempboro, &(new.pop));
+  strcpy(new.boro,tempboro);
+  int file = open("nyc_pop.data", O_WRONLY | O_APPEND);
+  if(file==-1){
+      printf("Error!\n");
+      return;
+  }
+  int err = write(file, &new, sizeof(new));
+  if(err==-1){
+      printf("Error:\n");
+      return;
+  }
+}
+
+
 
 int main (int argc, char ** argv){
   if (argc > 2){
@@ -121,11 +147,11 @@ int main (int argc, char ** argv){
     }
 
     else if (!strcmp(function,"-read_data")){
-      read_data("newnyc_pop.csv");
+      read_data("./newnyc_pop.csv");
     }
 
     else if (!strcmp(function,"-add_data")){
-      printf("-add_data\n");
+      add_data();
     }
 
     else if (!strcmp(function,"-update_data")){
