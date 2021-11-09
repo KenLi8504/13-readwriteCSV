@@ -77,7 +77,7 @@ void read_csv(char *fileName){
         printf("Error!\n");
     }
   }
-  printf("Wrote %d bytes to nyc_pop.txt\n", size);
+  printf("Wrote %d bytes to newnyc_pop.csv\n", size);
   printf("FINISHED READING CSV\n");
   }
 }
@@ -117,7 +117,7 @@ void add_data(){
   char tempboro[15];
   sscanf(input,"%d %s %d\n",&(new.year), tempboro, &(new.pop));
   strcpy(new.boro,tempboro);
-  int file = open("nyc_pop.data", O_WRONLY | O_APPEND);
+  int file = open("newnyc_pop.csv", O_WRONLY | O_APPEND);
   if(file==-1){
       printf("Error!\n");
       return;
